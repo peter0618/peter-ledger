@@ -1,0 +1,7 @@
+.rg-calendar {
+  font-size: 12px;
+  /* 달력 편집기 색깔 변경 */
+  background: #0000ff;
+  border: 1px solid #d2d5da;
+  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.3);
+}
