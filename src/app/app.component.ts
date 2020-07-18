@@ -1,17 +1,18 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import * as moment from 'moment';
 declare var RealGridJS;
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   gridView;
   gridDataProvider;
 
   ngOnInit(): void {
-    this.gridView = new RealGridJS.GridView('realgrid');  // html 선언ID
+    this.gridView = new RealGridJS.GridView('realgrid'); // html 선언ID
     this.gridDataProvider = new RealGridJS.LocalDataProvider();
     this.gridView.setDataSource(this.gridDataProvider);
 
@@ -34,7 +35,7 @@ export class AppComponent implements OnInit {
       },
       {
         fieldName: 'balance',
-        dataType: 'number'
+        dataType: 'number',
       },
     ]);
 
@@ -104,7 +105,7 @@ export class AppComponent implements OnInit {
         width: '100',
         style: {
           textAlignment: 'far',
-          numberFormat: '#,##0'
+          numberFormat: '#,##0',
         },
       },
     ]);
@@ -117,14 +118,33 @@ export class AppComponent implements OnInit {
         income: null,
         expenditure: '14870',
         balance: '616324',
-      }
+      },
+      {
+        date: '2020/07/02',
+        item: '찬양팀',
+        note: '회식비',
+        income: null,
+        expenditure: '50000',
+        balance: '566324',
+      },
     ]);
 
     this.gridView.setPasteOptions({
-      enabled: true
+      enabled: true,
     });
   }
 
-
-
+  onSave(): void {
+    console.log('onSave()');
+    this.gridView.commit();
+    const rows = this.gridDataProvider.getJsonRows(0, -1);
+    rows.map((row) => {
+      const { date, item, note, income, expenditure, balance } = row;
+      console.log(
+        `date : ${moment(date).format(
+          'YYYY/MM/DD'
+        )}, item : ${item}, note: ${note}, income : ${income}, expenditure : ${expenditure}, balance : ${balance}`
+      );
+    });
+  }
 }
