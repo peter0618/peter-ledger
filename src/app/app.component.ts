@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import * as moment from 'moment';
 declare var RealGridJS;
 
@@ -38,6 +38,7 @@ export class AppComponent implements OnInit {
       {
         fieldName: 'balance',
         dataType: 'number',
+        // calculateCallback: this.balanceCalculator,
       },
     ]);
 
@@ -165,12 +166,29 @@ export class AppComponent implements OnInit {
     this.gridView.commit();
     const rows = this.gridDataProvider.getJsonRows(0, -1);
     rows.map((row) => {
-      const { date, item, note, income, expenditure, balance } = row;
+      const {date, item, note, income, expenditure, balance} = row;
       console.log(
         `date : ${moment(date).format(
-          'YYYY/MM/DD'
-        )}, item : ${item}, note: ${note}, income : ${income}, expenditure : ${expenditure}, balance : ${balance}`
+          'YYYY/MM/DD',
+        )}, item : ${item}, note: ${note}, income : ${income}, expenditure : ${expenditure}, balance : ${balance}`,
       );
     });
+  }
+
+  balanceCalculator(dataRow, fieldName, fieldNames, values) {
+    let income = values[fieldNames.indexOf('income')];
+    let expenditure = values[fieldNames.indexOf('expenditure')];
+    if (!income) {
+      income = 0;
+    }
+    if (!expenditure) {
+      expenditure = 0;
+    }
+    if (dataRow === 0) {
+      return income; // 첫 행은 무조건 예산 입금
+    }
+    console.log(this.gridDataProvider);
+    console.log(`dataRow : ${dataRow}, income : ${income}, expenditure : ${expenditure}`);
+    return undefined;
   }
 }
